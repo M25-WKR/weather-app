@@ -1,0 +1,11 @@
+Should be able to use the location endpoint to make a seachable select box to be able to select the location. Then using the selected option within the select box we should be able to get the lat lng and send it to the weather app endpoint to be able to get the information for that location. 
+
+Use that location data to be able to display the location and applicable weather related information as well as the images to be able to show weather type.
+
+Do it for right now at first see how long that take then move on to doing it to be able to show more than one day or letting the user select how many days 
+
+
+Basic search for location is working need to build a dropdown section that can show the options and on click of one of those options the endpoint to get the weather should be called.
+Unless there is only one option that comes back then clicking search would also search for that city that came back
+
+Get this bit to work first then move onto making the view for the weather itself, should put the state and function for that in the main page so that it can be passed down into the lower components like search and weather mean no global store is needed
