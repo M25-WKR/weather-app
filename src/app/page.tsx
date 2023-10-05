@@ -9,18 +9,35 @@ import { styled } from 'styled-components';
 import Icon from './Components/Weather/Icon';
 import Temperature from './Components/Weather/Temperature';
 import Attributes from './Components/Weather/Attributes';
+import Days from './Components/Days';
+
 
 function WeatherApp() {
 
   const [weather, setWeather] = useState<Weather | undefined>(undefined)
   const [location, setLocation] = useState<Location | undefined>(undefined)
-  const [icon, setIcon] = useState<any>(undefined)
+  const [forecastDays, setForecastDays] = useState<number>(7)
+  const [days, setDays] = useState<Array<object>>([])
+
+  const [displayDay, setDisplayDay] = useState<number>(0);
 
   useEffect(() => {
     if(location) {
       getWeatherData(location?.latitude, location?.longitude)
     }
   }, [location])
+
+  useEffect(() => {
+    let daysMap:Array<object> = []
+    for(let i = 0; i < forecastDays; i++) {
+      let date = new Date();
+      daysMap?.push({
+        day: i,
+        date: new Date(date?.setDate(date?.getDate() + i))
+      })
+    }
+    setDays(daysMap);
+  }, [])
 
   async function getWeatherData(latitude: number | undefined, longitude:number | undefined) {
     let urlParams = [
@@ -34,23 +51,24 @@ function WeatherApp() {
       'precipitation_probability_mean'
     ]
 
-    await axios.get<Weather>(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&forecast_days=1&daily=${urlParams?.join?.(',')}`).then((response) => {
+    await axios.get<Weather>(`https://api.open-meteo.com/v1/forecast?&timezone=GMT&latitude=${latitude}&longitude=${longitude}&forecast_days=${forecastDays}&daily=${urlParams?.join?.(',')}`).then((response) => {
       setWeather(response?.data)
+      setDisplayDay(0)
     }).catch((error) => {
-      console.log(error);
     })
   }
 
   return (
     <StyledContainer>
       <Search location={location} setLocation={setLocation}/>
-      <StyledCityContainer>
+      {weather && <StyledCityContainer>
         <StyledWeatherContainer>
-          <Icon weather={weather}/>
-          <Temperature weather={weather}/>
+          <Icon weather={weather} displayDay={displayDay}/>
+          <Temperature weather={weather} displayDay={displayDay}/>
         </StyledWeatherContainer>
-        <Attributes city={location?.name} country={location?.country} weather={weather}/>
-      </StyledCityContainer>
+        <Attributes city={location?.name} country={location?.country} weather={weather} displayDay={displayDay}/>
+      </StyledCityContainer>}
+      {weather && <Days days={days} setDisplayDay={setDisplayDay} displayDay={displayDay}/>}
     </StyledContainer>
   )
 }
@@ -74,7 +92,7 @@ const StyledCityContainer = styled.div`
   gap: 2rem;
   background-color: transparent;
   flex-direction: column;
-  margin-top: 3rem;
+  margin: 3rem 0em;
 `;
 
 const StyledWeatherContainer = styled.div`

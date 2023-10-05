@@ -7,22 +7,23 @@ interface AttributeProps {
     city?: string
     country?: string
     weather?: Weather | undefined
+    displayDay?: number | undefined
 }
 
-function Attributes({city, country, weather}: AttributeProps) {
+function Attributes({city, country, weather, displayDay}: AttributeProps) {
     return (
         <StyledAttributesContainer>
-            <StyledCity>{city}, {country}</StyledCity>
+            <StyledCity>{city && city}{ country && `, ${country}`}</StyledCity>
                 {weather && 
                     <StyledAttributesWrapper>
                         <StyledPrecipitationContainer>
                             <StyledPrecipitationIcon icon={faDroplet}/>
-                            <StyledPrecipitationValue>{Math?.floor?.(Number?.(weather?.daily?.precipitation_probability_mean?.[0]))}</StyledPrecipitationValue>
+                            <StyledPrecipitationValue>{Math?.floor?.(Number?.(weather?.daily?.precipitation_probability_mean?.[displayDay ?? 0]))}</StyledPrecipitationValue>
                             <StyledPrecipitationUnit>{weather?.daily_units?.precipitation_probability_mean}</StyledPrecipitationUnit>
                         </StyledPrecipitationContainer>
                         <StyledWindContainer>
                             <StyledWindIcon icon={faWind}/>
-                            <StyledWindValue>{Math?.floor?.(Number?.(weather?.daily?.windspeed_10m_max?.[0]))}</StyledWindValue>
+                            <StyledWindValue>{Math?.floor?.(Number?.(weather?.daily?.windspeed_10m_max?.[displayDay ?? 0]))}</StyledWindValue>
                             <StyledWindUnit>{weather?.daily_units?.windspeed_10m_max}</StyledWindUnit>
                         </StyledWindContainer>
                     </StyledAttributesWrapper>
