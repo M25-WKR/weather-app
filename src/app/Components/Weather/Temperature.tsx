@@ -3,9 +3,10 @@ import { styled } from "styled-components";
 
 interface TemperatureProps {
     weather?: Weather | undefined
+    displayDay?: number | undefined
 }
 
-function Temperature({weather}: TemperatureProps) {
+function Temperature({weather, displayDay}: TemperatureProps) {
 
     
 
@@ -13,7 +14,7 @@ function Temperature({weather}: TemperatureProps) {
         <StyledTemperatureContainer>
             { weather && 
                 <>
-                    <StyledTemperatureValue>{Math?.floor?.(Number?.(weather?.daily?.apparent_temperature_max[0]))}</StyledTemperatureValue>
+                    <StyledTemperatureValue>{Math?.floor?.(Number?.(weather?.daily?.apparent_temperature_max[displayDay ?? 0]))}</StyledTemperatureValue>
                     <StyledTemperatureUnit>{weather?.daily_units?.apparent_temperature_max}</StyledTemperatureUnit>
                 </>
             }

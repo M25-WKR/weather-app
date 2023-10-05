@@ -7,18 +7,19 @@ import weatherIcon, { Icon } from "../WeatherCodes";
 
 interface IconProps {
     weather?: Weather | undefined
+    displayDay?: number | undefined
 }
 
-function Icon({weather}: IconProps) {
+function Icon({weather, displayDay}: IconProps) {
     
     const [icon, setIcon] = useState<IconDefinition | undefined>(undefined)
 
     useEffect(() => {
         const foundIcon = weatherIcon?.find?.((icon:Icon) => {
-          if(icon?.code?.includes(Number(weather?.daily?.weathercode[0]))) return icon
+          if(icon?.code?.includes(Number(weather?.daily?.weathercode[displayDay ?? 0]))) return icon
         })
         setIcon(foundIcon?.icon)
-      }, [weather])
+      }, [weather, displayDay])
 
     return (
         <>
